@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/models/cart_item.dart';
@@ -337,6 +339,13 @@ class Restaurant extends ChangeNotifier {
     ),
   ];
 
+//user cart
+  final List<CartItem> _cart = [];
+
+  // delivery address (which user can change/update)
+
+  String _deliveryAddress = 'Carrera 6 # 21-64';
+
   /*
 
   G E T T E R S  
@@ -345,15 +354,13 @@ class Restaurant extends ChangeNotifier {
 
   List<Food> get menu => _menu;
   List<CartItem> get cart => _cart;
+  String get deliveryAddress => _deliveryAddress;
 
 /*
 
   O P E R A T I O N S 
 
  */
-
-//user cart
-  final List<CartItem> _cart = [];
 
 // add to cart
   void addToCart(Food food, List<Addon> selectedAddons) {
@@ -364,7 +371,7 @@ class Restaurant extends ChangeNotifier {
 
       // check if the list of selected addons are the same
       bool isSameAddons =
-          ListEquality().equals(item.selectedAddons, selectedAddons);
+          const ListEquality().equals(item.selectedAddons, selectedAddons);
 
       return isSameFood && isSameAddons;
     });
@@ -431,6 +438,12 @@ class Restaurant extends ChangeNotifier {
     notifyListeners();
   }
 
+// update delivery address
+
+  void updateDeliveryAddress(String newaddress) {
+    _deliveryAddress = newaddress;
+    notifyListeners();
+  }
 /*
 
   H E L P E R S
@@ -464,6 +477,8 @@ class Restaurant extends ChangeNotifier {
     receipt.writeln();
     receipt.writeln("Artículos totales: ${getTotalItemCount()}");
     receipt.writeln("Precio total: ${_formatPrice(getTotalPrice())}");
+    receipt.writeln();
+    receipt.writeln("Entregar en: $deliveryAddress");
 
     return receipt.toString();
   }

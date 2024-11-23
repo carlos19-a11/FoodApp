@@ -1,12 +1,19 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:food_delivery/components/my_drawer_title.dart';
+import 'package:food_delivery/service/auth/auth_service.dart';
 
 import '../page/settings_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
+
+  void logout() {
+    final authService = AuthService();
+    authService.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +24,9 @@ class MyDrawer extends StatelessWidget {
           //app logo
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
-            child: Icon(
-              Icons.lock_open_rounded,
-              size: 80,
-              color: Theme.of(context).colorScheme.inversePrimary,
+            child: Lottie.asset(
+              'assets/images/animaciones/Animation-1732378984857.json',
+              height: 150, // Tamaño de la animación
             ),
           ),
           Padding(
@@ -55,7 +61,9 @@ class MyDrawer extends StatelessWidget {
           MyDrawerTitle(
             text: "L O G O U T",
             icon: Icons.logout,
-            onTap: () {},
+            onTap: () {
+              logout();
+            },
           ),
           const SizedBox(
             height: 25,

@@ -1,25 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/models/restaurant.dart';
+import 'package:provider/provider.dart';
 
 class MyCurrentLocal extends StatelessWidget {
-  const MyCurrentLocal({super.key});
+  MyCurrentLocal({super.key});
+
+  // Controlador de texto para el campo de dirección
+  final TextEditingController textController = TextEditingController();
 
   void openLocationSearchBox(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Tu ubicación"),
-        content: const TextField(
-          decoration: InputDecoration(hintText: "Buscar dirección..."),
+        content: TextField(
+          controller: textController, // Asociar el controlador
+          decoration: const InputDecoration(hintText: "Buscar dirección..."),
         ),
         actions: [
-          //cancel button
-          MaterialButton(
-            onPressed: () => Navigator.pop(context),
+          // Botón de cancelar
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Cierra el diálogo
+            },
             child: const Text("Cancelar"),
           ),
-          //save button
-          MaterialButton(
-            onPressed: () => Navigator.pop(context),
+          // Botón de guardar
+          TextButton(
+            onPressed: () {
+              // Obtén el texto del controlador
+              String newAddress = textController.text.trim();
+
+              if (newAddress.isNotEmpty) {
+                // Actualiza la dirección en el modelo Restaurant
+                context.read<Restaurant>().updateDeliveryAddress(newAddress);
+
+                // Limpia el controlador
+                textController.clear();
+              }
+
+              // Cierra el modal o pantalla actual
+              Navigator.pop(context);
+            },
             child: const Text("Enviar"),
           ),
         ],
@@ -42,16 +64,20 @@ class MyCurrentLocal extends StatelessWidget {
             onTap: () => openLocationSearchBox(context),
             child: Row(
               children: [
-                //address
-                Text(
-                  "6901 Hollywood Blv",
-                  style: TextStyle(
+                Consumer<Restaurant>(
+                  builder: (context, restaurant, child) => Text(
+                    restaurant.deliveryAddress,
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-
-                //drop down menu
-                Icon(Icons.keyboard_arrow_down_rounded)
+                // Icono desplegable
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ],
             ),
           )

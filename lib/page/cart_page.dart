@@ -21,7 +21,7 @@ class CartPage extends StatelessWidget {
         // ignore: deprecated_member_use
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: const Text("Carro"),
+          title: const Center(child: Text("Carro")),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
@@ -52,7 +52,7 @@ class CartPage extends StatelessWidget {
                   ),
                 );
               },
-              icon: const Icon(Icons.delete),
+              icon: const Icon(Icons.delete_forever_rounded),
             )
           ],
         ),

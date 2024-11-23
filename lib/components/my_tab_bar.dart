@@ -9,6 +9,7 @@ class MyTabBar extends StatelessWidget {
   const MyTabBar({super.key, required this.tabController});
 
   List<Tab> _buildCategoryTabs() {
+    // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
     return FoodCategory.values.map((Category) {
       return Tab(
         text: Category.toString().split('.').last,

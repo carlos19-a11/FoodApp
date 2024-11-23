@@ -23,16 +23,16 @@ class MySliverAppBar extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CartPage(),
+                builder: (context) => const CartPage(),
               ),
             );
           },
-          icon: const Icon(Icons.shopping_cart),
+          icon: const Icon(Icons.shopping_cart_outlined),
         )
       ],
       backgroundColor: Theme.of(context).colorScheme.background,
       foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: const Text("Cena al atardecer"),
+      title: const Center(child: Text("Cena al atardecer")),
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(
           padding: const EdgeInsets.only(bottom: 50.0),

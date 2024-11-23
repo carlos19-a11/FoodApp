@@ -23,7 +23,7 @@ class FoodPage extends StatefulWidget {
 class _FoodPageState extends State<FoodPage> {
   // Formateador de moneda en pesos colombianos
   final currencyFormatter = NumberFormat.currency(
-    locale: 'es_co', // Usa el locale para Colombia
+    locale: 'es_mex', // Usa el locale para Colombia
     symbol: 'COP ', // Coloca "COP" antes del valor
     decimalDigits: 0, // Ajusta según lo que necesites
   );
