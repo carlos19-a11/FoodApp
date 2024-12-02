@@ -18,35 +18,33 @@ class CartPage extends StatelessWidget {
 
       // Scaffold UI
       return Scaffold(
-        // ignore: deprecated_member_use
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           title: const Center(child: Text("Carro")),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
-            //clear cart button
+            // Clear cart button
             IconButton(
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text(
-                        "Estas seguro de que quieres limpiar el carro?"),
+                        "¿Estás seguro de que quieres limpiar el carrito?"),
                     actions: [
-                      // cancel button
+                      // Cancel button
                       TextButton(
                         onPressed: () => Navigator.pop(context),
                         child: const Text("Cancelar"),
                       ),
-
-                      // yes button
+                      // Yes button
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                           restaurant.clearCart();
                         },
-                        child: const Text("Si"),
+                        child: const Text("Sí"),
                       ),
                     ],
                   ),
@@ -58,7 +56,7 @@ class CartPage extends StatelessWidget {
         ),
         body: Column(
           children: [
-            //list of cart
+            // List of cart items
             Expanded(
               child: Column(
                 children: [
@@ -72,23 +70,47 @@ class CartPage extends StatelessWidget {
                           child: ListView.builder(
                               itemCount: userCart.length,
                               itemBuilder: (context, index) {
-                                // get individual cart item
+                                // Get individual cart item
                                 final cartItem = userCart[index];
 
-                                // return cart title UI
+                                // Return cart title UI
                                 return MyCartTitle(cartItem: cartItem);
                               }),
                         )
                 ],
               ),
             ),
-            // button to pay
+            // Button to go to payment page
             MyButton(
-                onTap: () => Navigator.push(
+              onTap: () {
+                // Check if the cart is empty before proceeding
+                if (userCart.isEmpty) {
+                  // Show an alert if the cart is empty
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Tu carrito está vacío."),
+                      content: const Text(
+                          "Por favor, agrega productos antes de proceder al pago."),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("Cerrar"),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  // Navigate to payment page if cart is not empty
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PaymentPage())),
-                text: "Ir a pagar"),
+                        builder: (context) => const PaymentPage()),
+                  );
+                }
+              },
+              text: "Ir a pagar",
+            ),
             const SizedBox(
               height: 25,
             ),

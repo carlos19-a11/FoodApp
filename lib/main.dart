@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/page/home_page.dart';
+import 'package:food_delivery/page/login_page.dart';
+import 'package:food_delivery/page/register_page.dart';
 import 'package:food_delivery/service/auth/auth_gate.dart';
 import 'package:food_delivery/firebase_options.dart';
 import 'package:food_delivery/models/restaurant.dart';
@@ -11,13 +15,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseAuth.instance.setLanguageCode('es'); // Cambiar a español
+
   runApp(
     MultiProvider(
       providers: [
-        // theme provider
+        // Theme provider
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
 
-        //restaurant provider
+        // Restaurant provider
         ChangeNotifierProvider(create: (context) => Restaurant()),
       ],
       child: const MyApp(),
@@ -28,12 +34,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const AuthGate(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const AuthGate(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/home': (context) => const HomePage(),
+      },
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }

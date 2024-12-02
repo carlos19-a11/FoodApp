@@ -1,18 +1,23 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:food_delivery/components/my_drawer_title.dart';
 import 'package:food_delivery/service/auth/auth_service.dart';
-
 import '../page/settings_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
-  void logout() {
+  // Modificar el logout para redirigir después de cerrar sesión
+  void logout(BuildContext context) async {
     final authService = AuthService();
-    authService.signOut();
+
+    try {
+      await authService.signOut(); // Llamamos al servicio para cerrar sesión
+      Navigator.pushReplacementNamed(context, '/login'); // Redirigimos al login
+    } catch (e) {
+      print("Error cerrando sesión: $e");
+      // Puedes manejar el error de alguna forma, como mostrando un mensaje
+    }
   }
 
   @override
@@ -21,7 +26,7 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       child: Column(
         children: [
-          //app logo
+          // app logo
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: Lottie.asset(
@@ -35,34 +40,33 @@ class MyDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
-          //home list title
+          // home list title
           MyDrawerTitle(
             text: "H O M E",
             icon: Icons.home,
             onTap: () => Navigator.pop(context),
           ),
-
-          //settings list title
+          // settings list title
           MyDrawerTitle(
             text: "A J U S T E S",
             icon: Icons.settings,
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),
+              );
             },
           ),
-
           const Spacer(),
-          //settings list title
+          // logout list title
           MyDrawerTitle(
             text: "L O G O U T",
             icon: Icons.logout,
             onTap: () {
-              logout();
+              logout(context); // Llamar a logout pasando el contexto
             },
           ),
           const SizedBox(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/models/restaurant.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class MyReceipt extends StatelessWidget {
   const MyReceipt({super.key});
@@ -8,7 +9,7 @@ class MyReceipt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 50),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 20),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +33,8 @@ class MyReceipt extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            const Text("El tiempo estimado de entrega es: 4:10 PM"),
+            // Mostrar la hora estimada de entrega
+            Text("El tiempo estimado de entrega es: $formattedTime"),
           ],
         ),
       ),

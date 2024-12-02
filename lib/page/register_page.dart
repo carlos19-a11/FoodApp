@@ -20,20 +20,33 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  bool isLoading = false; // Estado de carga
+
   void register() async {
+    // Oculta el teclado
+    FocusScope.of(context).unfocus();
+
+    // Evita múltiples registros
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true; // Activar indicador de carga
+    });
+
     // Obtén el servicio de autenticación
     final authService = AuthService();
 
-    // Verifica si las contraseñas coinciden
-    if (passwordController.text == confirmPasswordController.text) {
-      // Intenta crear el usuario
-      try {
+    try {
+      // Verifica si las contraseñas coinciden
+      if (passwordController.text == confirmPasswordController.text) {
+        // Intenta crear el usuario
         await authService.signUpWithEmailPassword(
-          emailController.text,
-          passwordController.text,
+          emailController.text.trim(),
+          passwordController.text.trim(),
         );
 
         // Muestra un mensaje de éxito
+        if (!mounted) return;
         showDialog(
           context: context,
           builder: (context) => const AlertDialog(
@@ -41,24 +54,30 @@ class _RegisterPageState extends State<RegisterPage> {
             content: Text("El usuario se ha registrado correctamente."),
           ),
         );
-      } catch (e) {
-        // Muestra el error
+      } else {
+        // Muestra un mensaje si las contraseñas no coinciden
+        if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Error"),
-            content: Text(e.toString()),
+          builder: (context) => const AlertDialog(
+            title: Text("¡Las contraseñas no coinciden!"),
           ),
         );
       }
-    } else {
-      // Muestra un mensaje si las contraseñas no coinciden
+    } catch (e) {
+      // Muestra el error
+      if (!mounted) return;
       showDialog(
         context: context,
-        builder: (context) => const AlertDialog(
-          title: Text("¡Las contraseñas no coinciden!"),
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
         ),
       );
+    } finally {
+      setState(() {
+        isLoading = false; // Desactivar indicador de carga
+      });
     }
   }
 
@@ -71,84 +90,92 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //logo
+              // Logo
               Lottie.asset(
                 'assets/images/animaciones/Animation-1732378984857.json',
-                height: 250, // Tamaño de la animación
+                height: 250,
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              //message, app slogan
+              const SizedBox(height: 25),
+
+              // Mensaje de bienvenida
               Text(
-                'Creemos una cuenta para ti ',
+                'Creemos una cuenta para ti',
                 style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.inversePrimary),
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              //email textfield
+              const SizedBox(height: 25),
+
+              // Email
               MyTexfield(
                 controller: emailController,
                 hintText: "Correo electrónico",
                 obscureText: false,
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
 
-              //password textfiled
+              // Contraseña
               MyTexfield(
                 controller: passwordController,
-                hintText: "Contrasena",
+                hintText: "Contraseña",
                 obscureText: true,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              //confirm password textfiled
+              const SizedBox(height: 10),
+
+              // Confirmar contraseña
               MyTexfield(
                 controller: confirmPasswordController,
-                hintText: "Confirmar Contrasena",
+                hintText: "Confirmar contraseña",
                 obscureText: true,
               ),
-              const SizedBox(
-                height: 25,
-              ),
+              const SizedBox(height: 25),
 
-              //sign Up button
-              MyButton(
-                text: "registrarse",
-                onTap: register,
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              //already have an account? Login here
+              // Botón de registro
+              isLoading
+                  ? const CircularProgressIndicator() // Indicador de carga
+                  : MyButton(
+                      text: "Registrarse",
+                      onTap: register,
+                    ),
+              const SizedBox(height: 25),
+
+              // Redirección a inicio de sesión
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Ya tienes una cuenta?",
+                    "¿Ya tienes una cuenta?",
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: Text(
-                      "Inicia sesión ahora",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                  )
+                  ),
+                  const SizedBox(width: 4),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, '/login'),
+                    child: Text(
+                      'Inicia sesión ahora',
+                      style: TextStyle(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .inversePrimary, // Esto depende del contexto
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  // GestureDetector(
+                  //   onTap: widget.onTap,
+                  //   child: Text(
+                  //     "Inicia sesión ahora",
+                  //     style: TextStyle(
+                  //       color: Theme.of(context).colorScheme.inversePrimary,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // )
                 ],
-              )
+              ),
             ],
           ),
         ),

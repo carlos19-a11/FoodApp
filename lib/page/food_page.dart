@@ -23,9 +23,10 @@ class FoodPage extends StatefulWidget {
 class _FoodPageState extends State<FoodPage> {
   // Formateador de moneda en pesos colombianos
   final currencyFormatter = NumberFormat.currency(
-    locale: 'es_mex', // Usa el locale para Colombia
-    symbol: 'COP ', // Coloca "COP" antes del valor
-    decimalDigits: 0, // Ajusta según lo que necesites
+    locale: 'es_CO', // Locale para Colombia
+    symbol: '\$', // Símbolo de pesos colombianos
+    decimalDigits: 0, // Sin decimales
+    customPattern: '\u00A4 #,###', // Mostrar el símbolo antes
   );
 
   // Método para añadir al carrito
@@ -66,7 +67,8 @@ class _FoodPageState extends State<FoodPage> {
                       ),
                       // Precio de la comida formateado en pesos colombianos
                       Text(
-                        currencyFormatter.format(widget.food.price),
+                        currencyFormatter
+                            .format(widget.food.price), // Formatear el precio
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -107,7 +109,8 @@ class _FoodPageState extends State<FoodPage> {
                             return CheckboxListTile(
                               title: Text(addon.name),
                               subtitle: Text(
-                                currencyFormatter.format(addon.price),
+                                currencyFormatter.format(addon
+                                    .price), // Formatear el precio del complemento
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.primary),

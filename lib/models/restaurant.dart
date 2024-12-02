@@ -82,12 +82,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Pan Francés, Salsa Qbano, Lechuga Batavia, Carne de Res Desmechada, Cebolla cabezona roja, Frijol Negro, Pico de Gallo, Guacamole, Salsa Queso Cheddar, Nachos.",
       imagPhat: "assets/images/salads/sandwich-mexicano.png",
-      price: 23.600,
+      price: 23600,
       category: FoodCategory.sandwich,
       availableAddons: [
-        Addon(name: "Extra carne", price: 7.000),
-        Addon(name: "Pico de Gallo", price: 3.000),
-        Addon(name: "Nachos", price: 3.000),
+        Addon(name: "Extra carne", price: 7000),
+        Addon(name: "Pico de Gallo", price: 3000),
+        Addon(name: "Nachos", price: 3000),
       ],
     ),
     Food(
@@ -95,12 +95,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Pan Francés, Carne de Res Desmechada, Queso Amarillo, Lechuga, Tomate, Pimentón, Apio, Mostaza, Salsa BBQ, Pasta de Tomate, Cebolla Roja y Salsa Qbano..",
       imagPhat: "assets/images/salads/sandwich-ropa-vieja-combo.png",
-      price: 29.900,
+      price: 29000,
       category: FoodCategory.sandwich,
       availableAddons: [
-        Addon(name: "Extra carne", price: 7.000),
-        Addon(name: "papas", price: 3.000),
-        Addon(name: "Queso Amarillo", price: 6.000),
+        Addon(name: "Extra carne", price: 7000),
+        Addon(name: "papas", price: 3000),
+        Addon(name: "Queso Amarillo", price: 6000),
       ],
     ),
     Food(
@@ -108,12 +108,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Pan Francés, Jamon de Cerdo, Piña Calada, Queso Mozzarella y Mayonesa.",
       imagPhat: "assets/images/salads/sandwich-hawaiano.png",
-      price: 15.600,
+      price: 15600,
       category: FoodCategory.sandwich,
       availableAddons: [
-        Addon(name: "Extra carne", price: 7.000),
-        Addon(name: "Piña Calada", price: 5.000),
-        Addon(name: "Queso Mozzarella", price: 5.000),
+        Addon(name: "Extra carne", price: 7000),
+        Addon(name: "Piña Calada", price: 5000),
+        Addon(name: "Queso Mozzarella", price: 5000),
       ],
     ),
     Food(
@@ -121,12 +121,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Mix de jamones (res y cerdo), queso mozzarella, lechuga batavia y salsa Qbano.",
       imagPhat: "assets/images/salads/sandwich-especial.png",
-      price: 16.900,
+      price: 16900,
       category: FoodCategory.sandwich,
       availableAddons: [
-        Addon(name: "Extra carne", price: 7.000),
-        Addon(name: "jamon", price: 2.000),
-        Addon(name: "queso mozzarella", price: 5.000),
+        Addon(name: "Extra carne", price: 7000),
+        Addon(name: "jamon", price: 2000),
+        Addon(name: "queso mozzarella", price: 5000),
       ],
     ),
     Food(
@@ -134,12 +134,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Pan Francés, Carne Hamburguesa de Res y Cerdo, Queso Mozzarella, Tocineta, Lechuga Batavia, Tomate, Pepinillos, Salsa BBQ, Salsa Qbano.",
       imagPhat: "assets/images/salads/sandwich-burger.png",
-      price: 22.600,
+      price: 22600,
       category: FoodCategory.sandwich,
       availableAddons: [
-        Addon(name: "Extra carne", price: 7.000),
-        Addon(name: "Tocineta", price: 5.000),
-        Addon(name: "Queso Mozzarella", price: 5.000),
+        Addon(name: "Extra carne", price: 7000),
+        Addon(name: "Tocineta", price: 5000),
+        Addon(name: "Queso Mozzarella", price: 5000),
       ],
     ),
     //Helados y mateadas
@@ -148,12 +148,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Preparadas con helado de chocolate y ralladura de chocolate.",
       imagPhat: "assets/images/sides/chocolate.png",
-      price: 15.000,
+      price: 15000,
       category: FoodCategory.helado,
       availableAddons: [
-        Addon(name: "335 ml", price: 17.000),
-        Addon(name: "473 ml", price: 18.000),
-        Addon(name: "550 ml", price: 23.000),
+        Addon(name: "335 ml", price: 17000),
+        Addon(name: "473 ml", price: 18000),
+        Addon(name: "550 ml", price: 23000),
       ],
     ),
     Food(
@@ -161,48 +161,48 @@ class Restaurant extends ChangeNotifier {
       description:
           "Brownie con cobertura de chocolate o arequipe. Acompañado de una bola de helado y ralladura de chocolate.",
       imagPhat: "assets/images/sides/browni.png",
-      price: 12.000,
+      price: 12000,
       category: FoodCategory.helado,
       availableAddons: [
-        Addon(name: "Bolas Helado", price: 3.000),
-        Addon(name: "salsa", price: 2.000),
-        Addon(name: "chips", price: 2.000),
+        Addon(name: "Bolas Helado", price: 3000),
+        Addon(name: "salsa", price: 2000),
+        Addon(name: "chips", price: 2000),
       ],
     ),
     Food(
       name: "Helado De cvainilla y café",
       description: "Preparadas con helado de vainilla y café.",
       imagPhat: "assets/images/sides/helados-café.png",
-      price: 12.000,
+      price: 12000,
       category: FoodCategory.helado,
       availableAddons: [
-        Addon(name: "335 ml", price: 15.000),
-        Addon(name: "473 ml", price: 17.000),
-        Addon(name: "550 ml", price: 20.000),
+        Addon(name: "335 ml", price: 15000),
+        Addon(name: "473 ml", price: 17000),
+        Addon(name: "550 ml", price: 20000),
       ],
     ),
     Food(
       name: "Helado De fresa",
       description: "Preparadas con helado de fresa y ralladura de chocolate.",
       imagPhat: "assets/images/sides/helados-fresa.png",
-      price: 12.000,
+      price: 12000,
       category: FoodCategory.helado,
       availableAddons: [
-        Addon(name: "335 ml", price: 15.000),
-        Addon(name: "473 ml", price: 17.000),
-        Addon(name: "550 ml", price: 20.000),
+        Addon(name: "335 ml", price: 15000),
+        Addon(name: "473 ml", price: 17000),
+        Addon(name: "550 ml", price: 20000),
       ],
     ),
     Food(
       name: "Helado De Frutos Rojos",
       description: "Preparadas con helado de frutos rojos y salsa de mora.",
       imagPhat: "assets/images/sides/frutos-del-bosque.png",
-      price: 14.000,
+      price: 14000,
       category: FoodCategory.helado,
       availableAddons: [
-        Addon(name: "335 ml", price: 16.000),
-        Addon(name: "473 ml", price: 19.000),
-        Addon(name: "550 ml", price: 25.000),
+        Addon(name: "335 ml", price: 16000),
+        Addon(name: "473 ml", price: 19000),
+        Addon(name: "550 ml", price: 25000),
       ],
     ),
 
@@ -212,36 +212,36 @@ class Restaurant extends ChangeNotifier {
       description:
           "Nuestra versión especial de pollo y champiñones con chorizo.",
       imagPhat: "assets/images/desserts/pizza-3-estaciones.png",
-      price: 15.000,
+      price: 15000,
       category: FoodCategory.pizza,
       availableAddons: [
-        Addon(name: "Queso", price: 5.000),
-        Addon(name: "Champiñones", price: 2.000),
-        Addon(name: "Chorizo", price: 2.000),
+        Addon(name: "Queso", price: 5000),
+        Addon(name: "Champiñones", price: 2000),
+        Addon(name: "Chorizo", price: 2000),
       ],
     ),
     Food(
       name: "Pizza Americana",
       description: "Maíz tierno y tocineta con un toque picantico de pepperon.",
       imagPhat: "assets/images/desserts/Americana.png",
-      price: 18.000,
+      price: 18000,
       category: FoodCategory.pizza,
       availableAddons: [
-        Addon(name: "Maíz tierno", price: 2.000),
-        Addon(name: "Tocineta", price: 5.000),
-        Addon(name: "Pepperon", price: 3.000),
+        Addon(name: "Maíz tierno", price: 2000),
+        Addon(name: "Tocineta", price: 5000),
+        Addon(name: "Pepperon", price: 3000),
       ],
     ),
     Food(
       name: "Pizza Honolulu",
       description: "Una combinación increíble con piña, tocineta y jalapeño.",
       imagPhat: "assets/images/desserts/Honolulu.png",
-      price: 18.900,
+      price: 18900,
       category: FoodCategory.pizza,
       availableAddons: [
-        Addon(name: "Piña", price: 2.000),
-        Addon(name: "Tocineta", price: 5.000),
-        Addon(name: "Jalapeño", price: 2.000),
+        Addon(name: "Piña", price: 2000),
+        Addon(name: "Tocineta", price: 5000),
+        Addon(name: "Jalapeño", price: 2000),
       ],
     ),
     Food(
@@ -249,12 +249,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Perfectamente horneada con el sabor del pepperoni en su máxima expresión.",
       imagPhat: "assets/images/desserts/Triple-Pepperoni.png",
-      price: 12.000,
+      price: 12000,
       category: FoodCategory.pizza,
       availableAddons: [
-        Addon(name: "Pepperoni", price: 3.000),
-        Addon(name: "Queso", price: 5.000),
-        Addon(name: "Chorizo", price: 2.000),
+        Addon(name: "Pepperoni", price: 3000),
+        Addon(name: "Queso", price: 5000),
+        Addon(name: "Chorizo", price: 2000),
       ],
     ),
     Food(
@@ -262,12 +262,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "Queso Mozarella, trocitos de pollo, piña, tocineta y salsa B.B.Q..",
       imagPhat: "assets/images/desserts/Hawaiian-Chick.png",
-      price: 22.000,
+      price: 22000,
       category: FoodCategory.pizza,
       availableAddons: [
-        Addon(name: "Pollo", price: 5.000),
-        Addon(name: "Tocineta", price: 5.000),
-        Addon(name: "Piña", price: 2.000),
+        Addon(name: "Pollo", price: 5000),
+        Addon(name: "Tocineta", price: 5000),
+        Addon(name: "Piña", price: 2000),
       ],
     ),
 
@@ -277,12 +277,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "El auténtico sabor de la bebida Coca-Cola®, una refrescante manera de compartir los mejores momentos.",
       imagPhat: "assets/images/drinks/Coca-Cola-sabor-original.png",
-      price: 4.000,
+      price: 4000,
       category: FoodCategory.bebidas,
       availableAddons: [
-        Addon(name: "1 lt", price: 7.500),
-        Addon(name: "1.5 lt", price: 10.500),
-        Addon(name: "3 lt", price: 15.000),
+        Addon(name: "1 lt", price: 7500),
+        Addon(name: "1.5 lt", price: 10500),
+        Addon(name: "3 lt", price: 15000),
       ],
     ),
     Food(
@@ -290,12 +290,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "El auténtico sabor de la bebida Coca-Cola® Zero, una refrescante manera de compartir los mejores momentos.",
       imagPhat: "assets/images/drinks/Coca-Cola-Zero.png",
-      price: 3.000,
+      price: 3000,
       category: FoodCategory.bebidas,
       availableAddons: [
-        Addon(name: "1 lt", price: 6.500),
-        Addon(name: "1.5 lt", price: 8.500),
-        Addon(name: "3 lt", price: 12.000),
+        Addon(name: "1 lt", price: 6500),
+        Addon(name: "1.5 lt", price: 8500),
+        Addon(name: "3 lt", price: 12000),
       ],
     ),
     Food(
@@ -303,12 +303,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "El auténtico sabor de la bebida Quatro Toronja, una refrescante manera de compartir los mejores momentos.",
       imagPhat: "assets/images/drinks/Quatro-Toronja.png",
-      price: 3.000,
+      price: 3000,
       category: FoodCategory.bebidas,
       availableAddons: [
-        Addon(name: "1 lt", price: 6.000),
-        Addon(name: "1.5 lt", price: 8.500),
-        Addon(name: "3 lt", price: 11.800),
+        Addon(name: "1 lt", price: 6000),
+        Addon(name: "1.5 lt", price: 8500),
+        Addon(name: "3 lt", price: 11800),
       ],
     ),
     Food(
@@ -316,12 +316,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "El auténtico sabor de la bebida Sprite Limón, una refrescante manera de compartir los mejores momentos.",
       imagPhat: "assets/images/drinks/Sprite-Limón.png",
-      price: 12.000,
+      price: 12000,
       category: FoodCategory.bebidas,
       availableAddons: [
-        Addon(name: "1.5 lt", price: 6.000),
-        Addon(name: "2 lt", price: 8.000),
-        Addon(name: "3 lt", price: 12.000),
+        Addon(name: "1.5 lt", price: 6000),
+        Addon(name: "2 lt", price: 8000),
+        Addon(name: "3 lt", price: 12000),
       ],
     ),
     Food(
@@ -329,12 +329,12 @@ class Restaurant extends ChangeNotifier {
       description:
           "La cerveza Club Colombia es de tipo lager de color dorado, elaborada con cebada malteada y malta de caramelo. Es una cerveza para las personas que disfruten de experiencias perfectas.",
       imagPhat: "assets/images/drinks/InternaDorada.png",
-      price: 3.500,
+      price: 3500,
       category: FoodCategory.bebidas,
       availableAddons: [
-        Addon(name: "Dorada", price: 3.500),
-        Addon(name: "Roja", price: 3.500),
-        Addon(name: "Negra", price: 3.500),
+        Addon(name: "Dorada", price: 3500),
+        Addon(name: "Roja", price: 3500),
+        Addon(name: "Negra", price: 3500),
       ],
     ),
   ];
@@ -345,6 +345,11 @@ class Restaurant extends ChangeNotifier {
   // delivery address (which user can change/update)
 
   String _deliveryAddress = 'Carrera 6 # 21-64';
+
+  bool _isPaid = false;
+
+  // Getter de pago
+  bool get isPaid => _isPaid;
 
   /*
 
@@ -450,48 +455,106 @@ class Restaurant extends ChangeNotifier {
 
  */
 
-//generate a recept
+  // Método para realizar el pago
+  void makePayment() {
+    if (_cart.isEmpty) {
+      // Si el carrito está vacío, no se puede pagar
+      return;
+    }
+
+    // Aquí podrías agregar la lógica para procesar el pago, como conectar con una API de pagos.
+
+    // Simulamos el proceso de pago
+    _isPaid = true;
+    _clearCartAfterPayment();
+    notifyListeners();
+  }
+
+  // Método para limpiar el carrito después de un pago
+  void _clearCartAfterPayment() {
+    _cart.clear();
+    notifyListeners();
+  }
+
+// Crear un formateador de moneda para los precios
+  final NumberFormat currencyFormatter =
+      NumberFormat.simpleCurrency(locale: 'es_CO');
+
+// Generar el recibo
   String displayCartReceipt() {
     final receipt = StringBuffer();
-    receipt.writeln("Aquí está tu recibo.");
+
+    // Título de la factura
+    receipt.writeln("*********************************************");
+    receipt.writeln(_centerText("            FACTURA DE COMPRA"));
+    receipt.writeln("*********************************************");
+    receipt.writeln(_centerText("       ¡Gracias por tu compra!"));
     receipt.writeln();
 
-    // format the date to include up to seconds only
+    // Fecha y hora de emisión
     String formattedDate =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-
-    receipt.writeln(formattedDate);
+        DateFormat(_centerText('yyyy-MM-dd hh:mm a')).format(DateTime.now());
+    receipt.writeln("Fecha y hora: $formattedDate");
     receipt.writeln();
-    receipt.writeln("-----------------------------------------------------");
 
-    for (final CartItem in _cart) {
+    receipt.writeln("--------------------------------------------------");
+
+    // Imprimir los artículos del carrito
+    for (final cartItem in _cart) {
+      // Alinear cantidad, nombre y precio de los productos
       receipt.writeln(
-          "${CartItem.quantity} x ${CartItem.food.name} - ${_formatPrice(CartItem.food.price)}");
-      if (CartItem.selectedAddons.isNotEmpty) {
+          "${cartItem.quantity.toString().padLeft(2)} x ${cartItem.food.name.padRight(25)} ${_formatPrice(cartItem.food.price)}");
+
+      // Imprimir complementos si los hay
+      if (cartItem.selectedAddons.isNotEmpty) {
         receipt.writeln(
-            " Complementos: ${_formatAddons(CartItem.selectedAddons)}");
+            "  Complementos: ${_formatAddons(cartItem.selectedAddons)}");
       }
-      receipt.writeln();
+
+      receipt.writeln("--------------------------------------------------");
     }
-    receipt.writeln("-----------------------------------------------------");
-    receipt.writeln();
+
+    // Mostrar total de artículos y precio total
     receipt.writeln("Artículos totales: ${getTotalItemCount()}");
     receipt.writeln("Precio total: ${_formatPrice(getTotalPrice())}");
     receipt.writeln();
-    receipt.writeln("Entregar en: $deliveryAddress");
+
+    // Dirección de entrega
+    receipt.writeln(_centerText("Entregar en: $deliveryAddress"));
+
+    receipt.writeln("*********************************************");
+    receipt.writeln(_centerText("       ¡Gracias por tu compra!"));
+    receipt.writeln("*********************************************");
 
     return receipt.toString();
   }
 
-//format double value into money
-  String _formatPrice(double price) {
-    return "\$${price.toStringAsFixed(2)}";
+// Función para centrar el texto en el recibo
+  String _centerText(String text) {
+    int maxLength = 45; // Longitud máxima de la línea
+    int padding =
+        (maxLength - text.length) ~/ 2; // Calcula el espacio necesario
+    return ' ' * padding +
+        text; // Añade espacios antes del texto para centrarlo
   }
 
-//format list of addons into a string summary
+// Formatear precio como moneda
+  String _formatPrice(double price) {
+    return currencyFormatter.format(price); // Utiliza el formateador de moneda
+  }
+
+// Formatear lista de complementos en un resumen
   String _formatAddons(List<Addon> addons) {
     return addons
         .map((addon) => "${addon.name}(${_formatPrice(addon.price)})")
-        .join(",");
+        .join(", ");
   }
 }
+
+// Obtener la hora actual
+final currentTime = DateTime.now();
+// Sumar 20 minutos
+final deliveryTime = currentTime.add(const Duration(minutes: 20));
+
+// Formatear la hora de entrega
+final formattedTime = DateFormat('hh:mm a').format(deliveryTime);

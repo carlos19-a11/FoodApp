@@ -19,10 +19,15 @@ class _PaymentPageState extends State<PaymentPage> {
   String cvvCode = '';
   bool isCvvFocused = false;
 
-  // user wants to pay
-  void userTappedpay() {
-    if (formKey.currentState!.validate()) {
-      // only show dialog if from is valid
+  // Función para validar los campos
+  bool isFormValid() {
+    return formKey.currentState?.validate() ?? false;
+  }
+
+  // Función que se llama cuando el usuario hace clic en "Paga ahora"
+  void userTappedPay() {
+    if (isFormValid()) {
+      // Mostrar el dialogo de confirmación
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -30,24 +35,23 @@ class _PaymentPageState extends State<PaymentPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text("Numero de tarjeta: $cardNumber"),
-                Text("Valida hasta: $expiryDate"),
-                Text("Nombre de la titular: $cardHolderName"),
+                Text("Número de tarjeta: $cardNumber"),
+                Text("Válida hasta: $expiryDate"),
+                Text("Nombre del titular: $cardHolderName"),
                 Text("CVC: $cvvCode"),
               ],
             ),
           ),
           actions: [
-            // cancel button
+            // Botón cancelar
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text("Cancelar"),
             ),
-
-            // yes button
+            // Botón confirmar
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); // Cerrar el dialogo
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -55,10 +59,15 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 );
               },
-              child: const Text("Si"),
+              child: const Text("Sí"),
             ),
           ],
         ),
+      );
+    } else {
+      // Mostrar un mensaje de error si los datos no son válidos
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, revisa los campos')),
       );
     }
   }
@@ -66,17 +75,16 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ignore: deprecated_member_use
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Verificar"),
+        title: const Text("Verificar pago"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //credit cart
+            // Widget para mostrar la tarjeta de crédito
             CreditCardWidget(
               cardNumber: cardNumber,
               expiryDate: expiryDate,
@@ -86,7 +94,7 @@ class _PaymentPageState extends State<PaymentPage> {
               onCreditCardWidgetChange: (p0) {},
             ),
 
-            //credit card form
+            // Formulario de tarjeta de crédito
             CreditCardForm(
               cardNumber: cardNumber,
               expiryDate: expiryDate,
@@ -104,13 +112,14 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             const SizedBox(height: 20),
 
+            // Botón de pagar
             MyButton(
-              onTap: userTappedpay,
+              onTap: userTappedPay,
               text: "Paga ahora",
             ),
             const SizedBox(
               height: 25,
-            )
+            ),
           ],
         ),
       ),
