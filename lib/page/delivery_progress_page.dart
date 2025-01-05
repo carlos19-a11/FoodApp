@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/my_receipt.dart';
 import 'package:food_delivery/models/restaurant.dart';
-import 'package:food_delivery/service/database/firestore.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryProgressPage extends StatefulWidget {
@@ -12,36 +11,30 @@ class DeliveryProgressPage extends StatefulWidget {
 }
 
 class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
-// get access to db
-  FirestoreService db = FirestoreService();
-
-  @override
-  void initState() {
-    super.initState();
-
-    // if we get to this page, submit order to firebase db
-    String receipt = context.read<Restaurant>().displayCartReceipt();
-    db.saveOrderToDatabase(receipt);
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Obtener el correo del usuario desde el UserModel
+    final userEmail = context.watch<UserModel>().email;
+
     return Scaffold(
-      // ignore: deprecated_member_use
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        // title: const Text("Entrega en curso...."),
+        // title: const Text('Progreso de la entrega'),
         backgroundColor: Colors.transparent,
       ),
-      bottomNavigationBar: _buildBottomNavBar(context),
-      body: const Column(
-        children: [MyReceipt()],
+      bottomNavigationBar: _buildBottomNavBar(context, userEmail),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Text('Bienvenido a la página de progreso de entrega'),
+            MyReceipt(),
+          ],
+        ),
       ),
     );
   }
 
-  // Custom Bottom Nav Bar - Message / call delivery driver
-  Widget _buildBottomNavBar(BuildContext context) {
+  Widget _buildBottomNavBar(BuildContext context, String userEmail) {
     return Container(
       height: 100,
       decoration: BoxDecoration(
@@ -54,75 +47,54 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
       padding: const EdgeInsets.all(25),
       child: Row(
         children: [
-          // profile pic of driver
+          // Reemplazar el ícono por una imagen
           Container(
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color: Theme.of(context).colorScheme.background,
               shape: BoxShape.circle,
             ),
             child: IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.person),
+              icon: Image.asset(
+                'assets/images/animaciones/mujer-de-negocios.png',
+                fit: BoxFit.cover, // Ajusta la imagen
+              ),
+              iconSize: 40, // Ajusta el tamaño de la imagen
             ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
-          // driver details
+          const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Mitch Koko",
-                style: TextStyle(
+                userEmail, // Mostrar el correo del usuario
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: 12,
                 ),
               ),
-              Text(
-                "Conductora",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              )
+              const Text(
+                "Mesera",
+                style: TextStyle(color: Colors.grey),
+              ),
             ],
           ),
           const Spacer(),
           Row(
             children: [
-              // message button
-              Container(
-                decoration: BoxDecoration(
-                  // ignore: deprecated_member_use
-                  color: Theme.of(context).colorScheme.background,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.message),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.picture_as_pdf),
+                color: Colors.red,
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              // call button
-              Container(
-                decoration: BoxDecoration(
-                  // ignore: deprecated_member_use
-                  color: Theme.of(context).colorScheme.background,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.call),
-                  color: Colors.green,
-                ),
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.print),
+                color: Colors.green,
               ),
             ],
-          )
+          ),
         ],
       ),
     );

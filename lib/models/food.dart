@@ -15,6 +15,8 @@ class Food {
     required this.category,
     required this.availableAddons,
   });
+
+  get id => null;
 }
 
 //food category

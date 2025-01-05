@@ -10,11 +10,13 @@ class MyDrawerTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25.0),
+      padding: const EdgeInsets.only(left: 18.0),
       child: ListTile(
         title: Text(
           text,
-          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              fontSize: 15),
         ),
         leading: Icon(
           icon,

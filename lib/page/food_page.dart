@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/my_button.dart';
+import 'package:food_delivery/models/cartmodel.dart';
 import 'package:food_delivery/models/restaurant.dart';
 import 'package:intl/intl.dart'; // Importa intl para el formato de moneda
 import 'package:provider/provider.dart';
@@ -131,9 +132,24 @@ class _FoodPageState extends State<FoodPage> {
 
                 // Botón para añadir al carrito
                 MyButton(
-                  onTap: () => addToCart(widget.food, widget.selectedAddon),
+                  onTap: () {
+                    // Agregar producto al carrito
+                    Provider.of<CartModel>(context, listen: false).addItem(
+                        widget.food); // Se pasa el objeto Food directamente
+
+                    // Opcional: agregar lógica adicional, como añadir complementos
+                    addToCart(widget.food, widget.selectedAddon);
+
+                    // Mostrar mensaje al usuario
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${widget.food.name} añadido al carrito'),
+                      ),
+                    );
+                  },
                   text: "Añadir a la cesta",
                 ),
+
                 const SizedBox(height: 25),
               ],
             ),

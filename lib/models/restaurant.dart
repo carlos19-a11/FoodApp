@@ -1,9 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:collection/collection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/models/cart_item.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'food.dart';
 
@@ -340,11 +342,14 @@ class Restaurant extends ChangeNotifier {
   ];
 
 //user cart
+
   final List<CartItem> _cart = [];
 
   // delivery address (which user can change/update)
 
   String _deliveryAddress = 'Carrera 6 # 21-64';
+  String? _selectedTable;
+  List<String> availableTables = []; // Lista dinámica de mesas
 
   bool _isPaid = false;
 
@@ -360,6 +365,7 @@ class Restaurant extends ChangeNotifier {
   List<Food> get menu => _menu;
   List<CartItem> get cart => _cart;
   String get deliveryAddress => _deliveryAddress;
+  String? get selectedTable => _selectedTable;
 
 /*
 
@@ -367,39 +373,32 @@ class Restaurant extends ChangeNotifier {
 
  */
 
-// add to cart
-  void addToCart(Food food, List<Addon> selectedAddons) {
-    //see if there is a cart item already with the same food and selected addons
-    CartItem? cartItem = _cart.firstWhereOrNull((item) {
-      // check if the food items are the same
-      bool isSameFood = item.food == food;
+  // En el modelo Restaurant, dentro de los métodos addToCart y removeFromCart
 
-      // check if the list of selected addons are the same
+// Método para agregar al carrito
+  void addToCart(Food food, List<Addon> selectedAddons) {
+    // Verificar si ya existe el item en el carrito
+    CartItem? cartItem = _cart.firstWhereOrNull((item) {
+      bool isSameFood = item.food == food;
       bool isSameAddons =
           const ListEquality().equals(item.selectedAddons, selectedAddons);
-
       return isSameFood && isSameAddons;
     });
 
-    // if item already exists, increase it's quantity
+    // Si el item ya existe, incrementar la cantidad
     if (cartItem != null) {
       cartItem.quantity++;
+    } else {
+      // Si no existe, agregar un nuevo item al carrito
+      _cart.add(CartItem(food: food, selectedAddons: selectedAddons));
     }
 
-    // otherwise, add a new cart item to the cart
-    else {
-      _cart.add(
-        CartItem(
-          food: food,
-          selectedAddons: selectedAddons,
-        ),
-      );
-    }
+    // Notificar a los listeners para actualizar la UI
     notifyListeners();
   }
 
-// remove from crat
-  void removeFormCart(CartItem cartItem) {
+// Método para remover del carrito
+  void removeFromCart(CartItem cartItem) {
     int cartIndex = _cart.indexOf(cartItem);
 
     if (cartIndex != -1) {
@@ -409,16 +408,38 @@ class Restaurant extends ChangeNotifier {
         _cart.removeAt(cartIndex);
       }
     }
+
+    // Notificar a los listeners para actualizar la UI
     notifyListeners();
   }
 
-// get total price of cart
+  // Método para incrementar la cantidad de un artículo
+  void incrementCartItem(CartItem cartItem) {
+    int index = _cart.indexOf(cartItem);
+    if (index != -1) {
+      _cart[index].quantity++;
+      notifyListeners();
+    }
+  }
+
+  // Método para decrementar la cantidad de un artículo
+  void decrementCartItem(CartItem cartItem) {
+    int index = _cart.indexOf(cartItem);
+    if (index != -1) {
+      if (_cart[index].quantity > 1) {
+        _cart[index].quantity--;
+      } else {
+        _cart.removeAt(index);
+      }
+      notifyListeners();
+    }
+  }
+
+  // Método para obtener el precio total del carrito
   double getTotalPrice() {
     double total = 0.0;
-
     for (CartItem cartItem in _cart) {
       double itemTotal = cartItem.food.price;
-
       for (Addon addon in cartItem.selectedAddons) {
         itemTotal += addon.price;
       }
@@ -427,10 +448,9 @@ class Restaurant extends ChangeNotifier {
     return total;
   }
 
-// get total number of items in cart
+  // Método para obtener el total de artículos en el carrito
   int getTotalItemCount() {
     int totalItemCount = 0;
-
     for (CartItem cartItem in _cart) {
       totalItemCount += cartItem.quantity;
     }
@@ -476,9 +496,13 @@ class Restaurant extends ChangeNotifier {
     notifyListeners();
   }
 
-// Crear un formateador de moneda para los precios
-  final NumberFormat currencyFormatter =
-      NumberFormat.simpleCurrency(locale: 'es_CO');
+// Crear un formateador de moneda para los precios en pesos colombianos
+  final currencyFormatter = NumberFormat.currency(
+    locale: 'es_CO', // Locale para Colombia
+    symbol: '\$', // Símbolo de pesos colombianos
+    decimalDigits: 0, // Sin decimales
+    customPattern: '\u00A4 #,###', // Mostrar el símbolo antes
+  );
 
 // Generar el recibo
   String displayCartReceipt() {
@@ -493,9 +517,18 @@ class Restaurant extends ChangeNotifier {
 
     // Fecha y hora de emisión
     String formattedDate =
-        DateFormat(_centerText('yyyy-MM-dd hh:mm a')).format(DateTime.now());
+        DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
     receipt.writeln("Fecha y hora: $formattedDate");
     receipt.writeln();
+
+    // Mostrar mesa seleccionada (si existe)
+    if (_selectedTable != null) {
+      receipt.writeln("Mesa seleccionada: $_selectedTable");
+      receipt.writeln();
+    } else {
+      receipt.writeln("Mesa seleccionada: Ninguna");
+      receipt.writeln();
+    }
 
     receipt.writeln("--------------------------------------------------");
 
@@ -510,9 +543,9 @@ class Restaurant extends ChangeNotifier {
         receipt.writeln(
             "  Complementos: ${_formatAddons(cartItem.selectedAddons)}");
       }
-
-      receipt.writeln("--------------------------------------------------");
     }
+
+    receipt.writeln("--------------------------------------------------");
 
     // Mostrar total de artículos y precio total
     receipt.writeln("Artículos totales: ${getTotalItemCount()}");
@@ -538,7 +571,7 @@ class Restaurant extends ChangeNotifier {
         text; // Añade espacios antes del texto para centrarlo
   }
 
-// Formatear precio como moneda
+// Formatear precio como moneda (en pesos colombianos con el símbolo ₱)
   String _formatPrice(double price) {
     return currencyFormatter.format(price); // Utiliza el formateador de moneda
   }
@@ -549,6 +582,23 @@ class Restaurant extends ChangeNotifier {
         .map((addon) => "${addon.name}(${_formatPrice(addon.price)})")
         .join(", ");
   }
+
+  void updateSelectedTable(String table) {
+    _selectedTable = table;
+    notifyListeners(); // Notifica cambios a los listeners
+  }
+
+  // Función para agregar una nueva mesa
+  void addTable(String tableName) {
+    availableTables.add(tableName);
+    notifyListeners();
+  }
+
+  // Función para eliminar una mesa
+  void removeTable(String tableName) {
+    availableTables.remove(tableName);
+    notifyListeners();
+  }
 }
 
 // Obtener la hora actual
@@ -558,3 +608,29 @@ final deliveryTime = currentTime.add(const Duration(minutes: 20));
 
 // Formatear la hora de entrega
 final formattedTime = DateFormat('hh:mm a').format(deliveryTime);
+
+// modelo para el usuario
+
+class UserModel with ChangeNotifier {
+  String name;
+  String email;
+
+  UserModel({
+    this.name = 'Usuario predeterminado',
+    this.email = 'usuario@ejemplo.com',
+  });
+
+  // Método para actualizar el nombre y correo
+  void updateUser(String newName, String newEmail) {
+    name = newName;
+    email = newEmail;
+    notifyListeners();
+  }
+}
+
+void logout(BuildContext context) async {
+  await FirebaseAuth.instance.signOut();
+  context
+      .read<UserModel>()
+      .updateUser('Usuario predeterminado', 'usuario@ejemplo.com');
+}

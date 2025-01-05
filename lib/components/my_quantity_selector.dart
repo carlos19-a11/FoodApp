@@ -6,25 +6,26 @@ class QuantitySelector extends StatelessWidget {
   final Food food;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
-  const QuantitySelector(
-      {super.key,
-      required this.quantity,
-      required this.food,
-      required this.onIncrement,
-      required this.onDecrement});
+
+  const QuantitySelector({
+    super.key,
+    required this.quantity,
+    required this.food,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // ignore: deprecated_member_use
         color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(50),
       ),
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [
-          //decrease button
+          // Botón de decrecer cantidad
           GestureDetector(
             onTap: onDecrement,
             child: Icon(
@@ -34,20 +35,25 @@ class QuantitySelector extends StatelessWidget {
             ),
           ),
 
-          //quantity count
+          // Muestra de la cantidad actual
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
-              width: 20,
+              width: 30, // Aumenté el tamaño para mejorar la legibilidad
               child: Center(
                 child: Text(
                   quantity.toString(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
                 ),
               ),
             ),
           ),
 
-          //increase button
+          // Botón de incrementar cantidad
           GestureDetector(
             onTap: onIncrement,
             child: Icon(

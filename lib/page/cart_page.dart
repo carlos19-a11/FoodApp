@@ -1,91 +1,130 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/my_button.dart';
 import 'package:food_delivery/components/my_cart_title.dart';
-// ignore: unused_import
-import 'package:food_delivery/models/cart_item.dart';
 import 'package:food_delivery/models/restaurant.dart';
-import 'package:food_delivery/page/payment_page.dart';
+import 'package:food_delivery/page/delivery_progress_page.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+  const CartPage(
+      {super.key, required Null Function(dynamic removedItem) onItemRemoved});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<Restaurant>(builder: (context, restaurant, child) {
-      // Cart
+      // Obtener el carrito del usuario
       final userCart = restaurant.cart;
 
-      // Scaffold UI
       return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: const Center(child: Text("Carro")),
+          title: const Text("Carro"),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
-            // Clear cart button
+            // Indicador del número de elementos en el carrito
+            // Stack(
+            //   children: [
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: const Icon(Icons.shopping_cart),
+            //     ),
+            //     if (userCart.isNotEmpty)
+            //       Positioned(
+            //         right: 8,
+            //         top: 8,
+            //         child: Container(
+            //           padding: const EdgeInsets.all(2),
+            //           decoration: BoxDecoration(
+            //             color: Colors.red,
+            //             borderRadius: BorderRadius.circular(10),
+            //           ),
+            //           constraints: const BoxConstraints(
+            //             minWidth: 18,
+            //             minHeight: 18,
+            //           ),
+            //           child: Text(
+            //             '${userCart.length}',
+            //             style: const TextStyle(
+            //               color: Colors.white,
+            //               fontSize: 12,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //             textAlign: TextAlign.center,
+            //           ),
+            //         ),
+            //       ),
+            //   ],
+            // ),
+            // Botón para limpiar el carrito
             IconButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text(
-                        "¿Estás seguro de que quieres limpiar el carrito?"),
-                    actions: [
-                      // Cancel button
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("Cancelar"),
-                      ),
-                      // Yes button
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          restaurant.clearCart();
-                        },
-                        child: const Text("Sí"),
-                      ),
-                    ],
-                  ),
-                );
+                if (userCart.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text(
+                          "¿Estás seguro de que quieres limpiar el carrito?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("Cancelar"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            restaurant.clearCart();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("El carrito ha sido vaciado."),
+                              ),
+                            );
+                          },
+                          child: const Text("Sí"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               icon: const Icon(Icons.delete_forever_rounded),
-            )
+            ),
           ],
         ),
         body: Column(
           children: [
-            // List of cart items
+            // Lista de elementos en el carrito
             Expanded(
-              child: Column(
-                children: [
-                  userCart.isEmpty
-                      ? const Expanded(
-                          child: Center(
-                            child: Text("El carrito está vacío.."),
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                              itemCount: userCart.length,
-                              itemBuilder: (context, index) {
-                                // Get individual cart item
-                                final cartItem = userCart[index];
-
-                                // Return cart title UI
-                                return MyCartTitle(cartItem: cartItem);
-                              }),
-                        )
-                ],
-              ),
+              child: userCart.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "El carrito está vacío.",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: userCart.length,
+                      itemBuilder: (context, index) {
+                        final cartItem = userCart[index];
+                        return MyCartTitle(
+                          cartItem: cartItem,
+                          onRemove: () {
+                            restaurant.removeFromCart(cartItem);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    '${cartItem.food.name} eliminado del carrito'),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
             ),
-            // Button to go to payment page
+            // Botón para proceder al pago
             MyButton(
               onTap: () {
-                // Check if the cart is empty before proceeding
                 if (userCart.isEmpty) {
-                  // Show an alert if the cart is empty
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -101,19 +140,17 @@ class CartPage extends StatelessWidget {
                     ),
                   );
                 } else {
-                  // Navigate to payment page if cart is not empty
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PaymentPage()),
+                      builder: (context) => const DeliveryProgressPage(),
+                    ),
                   );
                 }
               },
               text: "Ir a pagar",
             ),
-            const SizedBox(
-              height: 25,
-            ),
+            const SizedBox(height: 25),
           ],
         ),
       );
