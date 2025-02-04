@@ -1,9 +1,23 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Asegúrate de que esta línea esté presente y que esté correctamente configurada
+        classpath 'com.android.tools.build:gradle:7.4.0'  // Reemplaza por la versión correcta
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'  // Si estás usando Kotlin
+    }
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
 }
+
+
 
 rootProject.buildDir = "../build"
 subprojects {

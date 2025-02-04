@@ -1,48 +1,56 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "com.google.gms.google-services" // Para Firebase
     id "dev.flutter.flutter-gradle-plugin"
 }
 
 android {
-    namespace = "com.example.food_delivery"
-    compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    namespace = "com.example.food_delivery" // Define el namespace de tu aplicación
+    compileSdkVersion 34 // Ajusta según tus necesidades
+
+    defaultConfig {
+        applicationId "com.example.food_delivery" // ID único para tu aplicación
+        minSdkVersion 23 // Mínimo compatible
+        targetSdkVersion 34 // Objetivo
+        versionCode 1 // Incrementa con cada versión
+        versionName "1.0.0" // Nombre de la versión
+    }
+
+   buildTypes {
+    release {
+        // Habilitar reducción de código y recursos en la compilación de release
+        minifyEnabled true
+        shrinkResources true
+
+        // Opcional: Define un archivo ProGuard si necesitas configuraciones personalizadas
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        signingConfig signingConfigs.debug // Cambia esto si tienes un signingConfig específico
+    }
+
+    debug {
+        // Deshabilitar reducción de código y recursos en la compilación de debug
+        minifyEnabled false
+        shrinkResources false
+    }
+}
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
-    }
-
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.food_delivery"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-         minSdk = 23
-        // minSdk = flutter.minSdkVersion
-        targetSdk = 35
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
-        }
+        jvmTarget = "1.8"
     }
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
+    implementation platform("com.google.firebase:firebase-bom:32.1.1") // Ajusta según tus necesidades
 }

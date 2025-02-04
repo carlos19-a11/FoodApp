@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/models/cartmodel.dart';
+import 'package:food_delivery/models/ordenmodel.dart';
 import 'package:food_delivery/page/home_page.dart';
 import 'package:food_delivery/page/login_page.dart';
 import 'package:food_delivery/page/register_page.dart';
@@ -35,6 +36,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => Restaurant()),
         ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (context) => OrderModel()),
         ChangeNotifierProvider(
             create: (context) => CartModel()), // Agregar CartModel aquí
       ],

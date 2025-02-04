@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/my_table.dart';
+import 'package:food_delivery/page/dailyorderspage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:food_delivery/components/my_drawer_title.dart';
 import 'package:food_delivery/service/auth/auth_service.dart';
@@ -92,6 +95,19 @@ class MyDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const TableManagementPage(),
+                ),
+              );
+            },
+          ),
+          MyDrawerTitle(
+            text: "G E S T I Ó N  D E  P E D I D O S",
+            icon: Icons.list,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrdersPage(),
                 ),
               );
             },

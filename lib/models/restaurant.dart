@@ -356,6 +356,55 @@ class Restaurant extends ChangeNotifier {
   // Getter de pago
   bool get isPaid => _isPaid;
 
+  // Lista para almacenar los pedidos realizados
+  List<Map<String, dynamic>> _orders = [];
+
+  // Getter de pedidos
+  List<Map<String, dynamic>> get orders => _orders;
+
+  void addOrder(String userEmail, String table) {
+    if (_cart.isEmpty) return; // No se puede agregar un pedido vacío
+
+    final totalPrice = getTotalPrice();
+    final newOrder = {
+      'id': DateTime.now().toString(),
+      'total': totalPrice,
+      'items': _cart
+          .map((cartItem) => {
+                'name': cartItem.food.name,
+                'addons': cartItem.selectedAddons.isNotEmpty
+                    ? cartItem.selectedAddons
+                        .map((addon) => addon.name)
+                        .toList()
+                    : [], // Lista de nombres de los adicionales
+              })
+          .toList(),
+      'status': 'Pendiente',
+      'userEmail': userEmail,
+      'table': table,
+      'date': DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now()),
+    };
+
+    _orders.add(newOrder);
+    notifyListeners();
+
+    // Limpiar el carrito después de agregar el pedido
+    clearCart();
+  }
+
+  String _formatDate(String date) {
+    final DateTime parsedDate =
+        DateFormat('yyyy-MM-dd').parse(date); // Parsear la fecha original
+    return DateFormat('dd-MM-yyyy')
+        .format(parsedDate); // Formatearla en el formato deseado
+  }
+
+  // Método para limpiar el carrito después de realizar un pago o agregar un pedido
+  void clearCart() {
+    _cart.clear();
+    notifyListeners();
+  }
+
   /*
 
   G E T T E R S  
@@ -372,6 +421,22 @@ class Restaurant extends ChangeNotifier {
   O P E R A T I O N S 
 
  */
+
+  void updateOrderStatus(String orderId, String newStatus) {
+    final order = _orders.firstWhere((order) => order['id'] == orderId);
+
+    if (order['status'] == 'Completado') {
+      return; // No permitir cambios si el estado es "Completado"
+    }
+
+    order['status'] = newStatus;
+
+    if (newStatus == 'Completado') {
+      order['completedTime'] = DateFormat('hh:mm a').format(DateTime.now());
+    }
+
+    notifyListeners();
+  }
 
   // En el modelo Restaurant, dentro de los métodos addToCart y removeFromCart
 
@@ -458,10 +523,11 @@ class Restaurant extends ChangeNotifier {
   }
 
 //clear cart
-  void clearCart() {
-    _cart.clear();
-    notifyListeners();
-  }
+  // void clearCart() {
+  //   _cart.clear();
+
+  //   notifyListeners();
+  // }
 
 // update delivery address
 
@@ -611,19 +677,16 @@ final formattedTime = DateFormat('hh:mm a').format(deliveryTime);
 
 // modelo para el usuario
 
-class UserModel with ChangeNotifier {
-  String name;
-  String email;
+class UserModel extends ChangeNotifier {
+  String _name = '';
+  String _email = '';
 
-  UserModel({
-    this.name = 'Usuario predeterminado',
-    this.email = 'usuario@ejemplo.com',
-  });
+  String get name => _name;
+  String get email => _email;
 
-  // Método para actualizar el nombre y correo
-  void updateUser(String newName, String newEmail) {
-    name = newName;
-    email = newEmail;
+  void updateUser(String name, String email) {
+    _name = name;
+    _email = email;
     notifyListeners();
   }
 }

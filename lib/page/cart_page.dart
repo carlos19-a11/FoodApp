@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/my_button.dart';
 import 'package:food_delivery/components/my_cart_title.dart';
@@ -143,7 +145,7 @@ class CartPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DeliveryProgressPage(),
+                      builder: (context) => DeliveryProgressPage(),
                     ),
                   );
                 }
