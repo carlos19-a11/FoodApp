@@ -573,57 +573,35 @@ class Restaurant extends ChangeNotifier {
 // Generar el recibo
   String displayCartReceipt() {
     final receipt = StringBuffer();
+    receipt.writeln("=======================================");
+    receipt.writeln(_centerText("FACTURA DE COMPRA"));
+    receipt.writeln("=======================================");
 
-    // Título de la factura
-    receipt.writeln("*********************************************");
-    receipt.writeln(_centerText("            FACTURA DE COMPRA"));
-    receipt.writeln("*********************************************");
-    receipt.writeln(_centerText("       ¡Gracias por tu compra!"));
-    receipt.writeln();
-
-    // Fecha y hora de emisión
     String formattedDate =
         DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
-    receipt.writeln("Fecha y hora: $formattedDate");
-    receipt.writeln();
+    receipt.writeln("Fecha y hora: $formattedDate\n");
 
-    // Mostrar mesa seleccionada (si existe)
-    if (_selectedTable != null) {
-      receipt.writeln("Mesa seleccionada: $_selectedTable");
-      receipt.writeln();
-    } else {
-      receipt.writeln("Mesa seleccionada: Ninguna");
-      receipt.writeln();
-    }
+    receipt.writeln("Mesa: ${_selectedTable ?? 'Ninguna'}");
+    receipt.writeln("---------------------------------------");
 
-    receipt.writeln("--------------------------------------------------");
-
-    // Imprimir los artículos del carrito
     for (final cartItem in _cart) {
-      // Alinear cantidad, nombre y precio de los productos
       receipt.writeln(
-          "${cartItem.quantity.toString().padLeft(2)} x ${cartItem.food.name.padRight(25)} ${_formatPrice(cartItem.food.price)}");
+          "${cartItem.quantity} x ${cartItem.food.name.padRight(20)} ${_formatPrice(cartItem.food.price)}");
 
-      // Imprimir complementos si los hay
       if (cartItem.selectedAddons.isNotEmpty) {
         receipt.writeln(
             "  Complementos: ${_formatAddons(cartItem.selectedAddons)}");
       }
     }
 
-    receipt.writeln("--------------------------------------------------");
+    receipt.writeln("---------------------------------------");
+    receipt.writeln("Total artículos: ${getTotalItemCount()}");
+    receipt.writeln("Total a pagar: ${_formatPrice(getTotalPrice())}\n");
 
-    // Mostrar total de artículos y precio total
-    receipt.writeln("Artículos totales: ${getTotalItemCount()}");
-    receipt.writeln("Precio total: ${_formatPrice(getTotalPrice())}");
-    receipt.writeln();
-
-    // Dirección de entrega
-    receipt.writeln(_centerText("Entregar en: $deliveryAddress"));
-
-    receipt.writeln("*********************************************");
-    receipt.writeln(_centerText("       ¡Gracias por tu compra!"));
-    receipt.writeln("*********************************************");
+    receipt.writeln("Entrega en: $deliveryAddress");
+    receipt.writeln("=======================================");
+    receipt.writeln(_centerText("¡Gracias por tu compra!"));
+    receipt.writeln("=======================================");
 
     return receipt.toString();
   }

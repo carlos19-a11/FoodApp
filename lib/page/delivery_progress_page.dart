@@ -1,44 +1,46 @@
 import 'dart:typed_data';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:food_delivery/components/my_receipt.dart';
-import 'package:food_delivery/models/cartmodel.dart';
 import 'package:food_delivery/models/restaurant.dart';
 import 'package:food_delivery/page/dailyorderspage.dart';
-import 'package:food_delivery/page/home_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class DeliveryProgressPage extends StatefulWidget {
-  DeliveryProgressPage({super.key});
-
   @override
   State<DeliveryProgressPage> createState() => _DeliveryProgressPageState();
 }
 
 class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
-  final ScreenshotController _screenshotController = ScreenshotController();
+  final GlobalKey _globalKey = GlobalKey(); // Clave global para capturar
 
   Future<void> _captureAndShareScreenshot() async {
     try {
-      // Captura la pantalla como un archivo de bytes
-      final Uint8List? image = await _screenshotController.capture();
-      if (image == null) return;
+      await Future.delayed(
+          const Duration(milliseconds: 500)); // Esperar renderizado
 
-      // Guarda la imagen temporalmente
+      RenderRepaintBoundary? boundary = _globalKey.currentContext
+          ?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) {
+        print("Error: No se pudo capturar la factura.");
+        return;
+      }
+
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      final Uint8List pngBytes = byteData!.buffer.asUint8List();
+
       final tempDir = await getTemporaryDirectory();
       final imagePath =
-          await File('${tempDir.path}/screenshot.png').writeAsBytes(image);
+          await File('${tempDir.path}/factura.png').writeAsBytes(pngBytes);
 
-      // Comparte la imagen con opciones avanzadas
-      await Share.shareXFiles(
-        [XFile(imagePath.path)],
-        text: '¡Mira esta captura!',
-        subject: 'Detalle del pedido',
-      );
+      await Share.shareXFiles([XFile(imagePath.path)],
+          text: '¡Factura de compra!', subject: 'Detalle del pedido');
     } catch (e) {
       print('Error al compartir captura: $e');
     }
@@ -49,20 +51,13 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
     final userEmail = context.watch<UserModel>().email;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
       ),
       bottomNavigationBar: _buildBottomNavBar(context, userEmail),
-      body: Screenshot(
-        controller: _screenshotController,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              MyReceipt(),
-            ],
-          ),
-        ),
+      body: Center(
+        child: MyReceipt(globalKey: _globalKey), // Pasamos la clave aquí
       ),
     );
   }
@@ -80,7 +75,6 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
       padding: const EdgeInsets.all(25),
       child: Row(
         children: [
-          // Reemplazar el ícono por una imagen
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
@@ -113,26 +107,14 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
             ],
           ),
           const Spacer(),
-          // Botón de "Finalizar Pedido" con captura y compartir
           ElevatedButton(
             onPressed: () async {
-              // Primero capturamos y compartimos la captura de pantalla
-              await _captureAndShareScreenshot();
-
-              // Luego obtenemos el correo del usuario
-              final userEmail = context.read<UserModel>().email;
-              final selectedTable =
-                  'Mesa 1'; // Reemplazar por la selección real del usuario
-
-              // Agregar el pedido al modelo Restaurant
+              await _captureAndShareScreenshot(); // Captura solo la factura
+              final selectedTable = 'Mesa 1';
               context.read<Restaurant>().addOrder(userEmail, selectedTable);
-
-              // Navegar a la pantalla de pedidos
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => OrdersPage(),
-                ),
+                MaterialPageRoute(builder: (context) => OrdersPage()),
               );
             },
             style: ElevatedButton.styleFrom(
