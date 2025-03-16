@@ -4,14 +4,17 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/models/cartmodel.dart';
 import 'package:food_delivery/models/ordenmodel.dart';
+import 'package:food_delivery/page/add_product_page.dart';
 import 'package:food_delivery/page/home_page.dart';
 import 'package:food_delivery/page/login_page.dart';
 import 'package:food_delivery/page/register_page.dart';
 import 'package:food_delivery/service/auth/auth_gate.dart';
 import 'package:food_delivery/firebase_options.dart';
 import 'package:food_delivery/models/restaurant.dart';
+import 'package:food_delivery/service/product_service.dart';
 import 'package:food_delivery/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,12 +23,11 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Verificar si no estamos en Windows antes de inicializar Firebase
   if (!Platform.isWindows) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    FirebaseAuth.instance.setLanguageCode('es'); // Cambiar a español
+    FirebaseAuth.instance.setLanguageCode('es');
   } else {
     debugPrint('Firebase no está configurado para Windows.');
   }
@@ -37,8 +39,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Restaurant()),
         ChangeNotifierProvider(create: (context) => UserModel()),
         ChangeNotifierProvider(create: (context) => OrderModel()),
-        ChangeNotifierProvider(
-            create: (context) => CartModel()), // Agregar CartModel aquí
+        ChangeNotifierProvider(create: (context) => CartModel()),
+        ChangeNotifierProvider(create: (context) => FoodService()),
       ],
       child: const MyApp(),
     ),
@@ -58,39 +60,32 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _startLogoutTimer(); // Inicia el temporizador cuando la app arranca
+    _startLogoutTimer();
   }
 
   @override
   void dispose() {
-    _logoutTimer?.cancel(); // Cancela el temporizador al cerrar la app
+    _logoutTimer?.cancel();
     super.dispose();
   }
 
-  // Inicia el temporizador para cerrar sesión después de 5 minutos de inactividad
   void _startLogoutTimer() {
-    const timeoutDuration = Duration(minutes: 30); // Tiempo sin interacción
+    const timeoutDuration = Duration(minutes: 30);
     _logoutTimer = Timer(timeoutDuration, _handleAutoLogout);
   }
 
-  // Función para manejar el cierre automático de sesión
   Future<void> _handleAutoLogout() async {
-    // Cerrar sesión en Firebase
     await FirebaseAuth.instance.signOut();
-
-    // Restablecer estado del usuario en el UserModel
     Provider.of<UserModel>(context, listen: false).updateUser(
       'Usuario predeterminado',
       'usuario@ejemplo.com',
     );
 
-    // Redirigir al usuario al login usando el navigatorKey
     if (navigatorKey.currentState != null) {
       navigatorKey.currentState!.pushReplacementNamed('/login');
     }
   }
 
-  // Reinicia el temporizador de cierre de sesión cuando el usuario interactúa
   void _resetLogoutTimer() {
     _logoutTimer?.cancel();
     _startLogoutTimer();
@@ -98,21 +93,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap:
-          _resetLogoutTimer, // Reiniciar el temporizador al tocar cualquier parte de la pantalla
-      child: MaterialApp(
-        navigatorKey: navigatorKey, // Usar el GlobalKey aquí
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const AuthGate(),
-          '/login': (context) => const LoginPage(),
-          '/register': (context) => const RegisterPage(),
-          '/home': (context) => const HomePage(),
-        },
-        theme: Provider.of<ThemeProvider>(context).themeData,
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812), // Tamaño base (iPhone X)
+      minTextAdapt: true,
+      builder: (context, child) {
+        return GestureDetector(
+          onTap: _resetLogoutTimer,
+          child: MaterialApp(
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const AuthGate(),
+              '/login': (context) => const LoginPage(),
+              '/register': (context) => const RegisterPage(),
+              '/home': (context) => const HomePage(),
+              '/add_food': (context) => const AddFoodPage(),
+            },
+            theme: Provider.of<ThemeProvider>(context).themeData,
+          ),
+        );
+      },
     );
   }
 }

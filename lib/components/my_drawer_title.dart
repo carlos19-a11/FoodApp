@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyDrawerTitle extends StatelessWidget {
   final String text;
@@ -16,7 +17,7 @@ class MyDrawerTitle extends StatelessWidget {
           text,
           style: TextStyle(
               color: Theme.of(context).colorScheme.inversePrimary,
-              fontSize: 15),
+              fontSize: 12.sp),
         ),
         leading: Icon(
           icon,

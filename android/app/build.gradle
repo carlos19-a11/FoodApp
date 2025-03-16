@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    id "org.jetbrains.kotlin.android" version "1.9.24" apply false
     id "kotlin-android"
     id "com.google.gms.google-services" // Para Firebase
     id "dev.flutter.flutter-gradle-plugin"
@@ -7,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.example.food_delivery" // Define el namespace de tu aplicación
-    compileSdkVersion 34 // Ajusta según tus necesidades
+    compileSdkVersion 35 // Ajusta según tus necesidades
 
     defaultConfig {
         applicationId "com.example.food_delivery" // ID único para tu aplicación
         minSdkVersion 23 // Mínimo compatible
-        targetSdkVersion 34 // Objetivo
+        targetSdkVersion 35 // Objetivo
         versionCode 1 // Incrementa con cada versión
         versionName "1.0.0" // Nombre de la versión
     }
@@ -51,6 +52,6 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
     implementation platform("com.google.firebase:firebase-bom:32.1.1") // Ajusta según tus necesidades
 }

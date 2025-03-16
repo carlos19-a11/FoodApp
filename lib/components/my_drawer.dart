@@ -126,6 +126,14 @@ class MyDrawer extends StatelessWidget {
               );
             },
           ),
+          MyDrawerTitle(
+            text: "C R E A R  P R O D U C T O ",
+            icon: Icons.add,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/add_food');
+            },
+          ),
           const Spacer(),
           // Logout list title
           MyDrawerTitle(

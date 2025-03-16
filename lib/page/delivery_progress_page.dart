@@ -1,15 +1,16 @@
-import 'dart:typed_data';
 import 'dart:io';
-import 'dart:ui';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/components/my_receipt.dart';
 import 'package:food_delivery/models/restaurant.dart';
 import 'package:food_delivery/page/dailyorderspage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
 
 class DeliveryProgressPage extends StatefulWidget {
   @override
@@ -17,52 +18,59 @@ class DeliveryProgressPage extends StatefulWidget {
 }
 
 class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
-  final GlobalKey _globalKey = GlobalKey(); // Clave global para capturar
+  final MyReceipt _receipt = MyReceipt(); // Instancia de recibo
 
-  Future<void> _captureAndShareScreenshot() async {
-    try {
-      await Future.delayed(
-          const Duration(milliseconds: 500)); // Esperar renderizado
+  /// Captura toda la factura correctamente
+  Future<Uint8List?> _captureFullReceipt() async {
+    return await _receipt.captureReceipt();
+  }
 
-      RenderRepaintBoundary? boundary = _globalKey.currentContext
-          ?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) {
-        print("Error: No se pudo capturar la factura.");
-        return;
-      }
+  /// Convierte la imagen capturada en PDF
+  Future<File?> _generatePdf(Uint8List imageBytes) async {
+    final pdf = pw.Document();
+    final image = pw.MemoryImage(imageBytes);
 
-      final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ImageByteFormat.png);
-      final Uint8List pngBytes = byteData!.buffer.asUint8List();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Center(child: pw.Image(image)),
+      ),
+    );
 
-      final tempDir = await getTemporaryDirectory();
-      final imagePath =
-          await File('${tempDir.path}/factura.png').writeAsBytes(pngBytes);
+    final tempDir = await getTemporaryDirectory();
+    final pdfPath = "${tempDir.path}/factura.pdf";
+    final pdfFile = File(pdfPath);
+    await pdfFile.writeAsBytes(await pdf.save());
 
-      await Share.shareXFiles([XFile(imagePath.path)],
-          text: '¡Factura de compra!', subject: 'Detalle del pedido');
-    } catch (e) {
-      print('Error al compartir captura: $e');
-    }
+    return pdfFile;
+  }
+
+  /// Captura la factura y la comparte como PDF sin cortes
+  Future<void> _captureAndSharePdf() async {
+    final imageBytes = await _captureFullReceipt();
+    if (imageBytes == null) return;
+
+    final pdfFile = await _generatePdf(imageBytes);
+    if (pdfFile == null) return;
+
+    await Share.shareXFiles([XFile(pdfFile.path)], text: 'Factura de compra');
   }
 
   @override
   Widget build(BuildContext context) {
-    final userEmail = context.watch<UserModel>().email;
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
-      bottomNavigationBar: _buildBottomNavBar(context, userEmail),
-      body: Center(
-        child: MyReceipt(globalKey: _globalKey), // Pasamos la clave aquí
+      appBar: AppBar(backgroundColor: Colors.white),
+      bottomNavigationBar: _buildBottomNavBar(context),
+      body: SingleChildScrollView(
+        child: _receipt, // Muestra la factura
       ),
     );
   }
 
-  Widget _buildBottomNavBar(BuildContext context, String userEmail) {
+  Widget _buildBottomNavBar(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userEmail = user?.email ?? "Usuario no autenticado";
+
     return Container(
       height: 100,
       decoration: BoxDecoration(
@@ -72,9 +80,10 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
           topRight: Radius.circular(40),
         ),
       ),
-      padding: const EdgeInsets.all(25),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
+          // Ícono de usuario con imagen
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
@@ -86,50 +95,66 @@ class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
                 'assets/images/animaciones/mujer-de-negocios.png',
                 fit: BoxFit.cover,
               ),
-              iconSize: 40,
+              iconSize: 40.w,
             ),
           ),
           const SizedBox(width: 10),
+
+          // Correo del usuario autenticado
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 userEmail,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
+                  color: Colors.black,
                 ),
               ),
               const Text(
                 "Mesera",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.black, fontSize: 12),
               ),
             ],
           ),
           const Spacer(),
+
+          // Botón de "Finalizar Pedido"
           ElevatedButton(
             onPressed: () async {
-              await _captureAndShareScreenshot(); // Captura solo la factura
+              final restaurant = context
+                  .read<Restaurant>(); // Guarda referencia antes de async
               final selectedTable = 'Mesa 1';
-              context.read<Restaurant>().addOrder(userEmail, selectedTable);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => OrdersPage()),
-              );
+
+              await _captureAndSharePdf(); // Captura sin cortes y comparte
+
+              restaurant.addOrder(userEmail,
+                  selectedTable); // Agregar pedido con email correcto
+              if (mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrdersPage()),
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             ),
-            child: const Text(
-              'Finalizar Pedido',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                const SizedBox(width: 5),
+                const Text(
+                  'Finalizar Pedido',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ],
             ),
           ),
         ],

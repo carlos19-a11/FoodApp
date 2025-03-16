@@ -14,6 +14,7 @@ class Restaurant extends ChangeNotifier {
   final List<Food> _menu = [
     //burgers
     Food(
+      id: '',
       name: "Corral Queso",
       description:
           "Jugosa carne 100% de res de 125 g, con una deliciosa tajada de queso tipo mozzarella, tomate en rodajas, cebolla en rodajas, lechuga, salsa blanca, salsa de tomate y mostaza en pan ajonjolí..",
@@ -27,6 +28,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Todoterreno Callejera",
       description:
           "Dos carnes 100% de res de 125 g a la parrilla cada una, con salsa BBQ, tocineta, papas callejeras, una tajada de queso tipo mozzarella, mostaza y salsa blanca en pan ajonjolí..",
@@ -40,6 +42,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Callejera",
       description:
           "Jugosa carne 100% de res de 125 g, una tajada de queso tipo mozzarella, papas callejeras, salsa blanca, salsa de tomate y mostaza en pan ajonjolí..",
@@ -53,6 +56,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Corral Mexinaca",
       description:
           "Jugosa carne 100% de res de 125 g, con una taja de queso tipo mozzarella, increíble guacamole, fríjol refrito, tomate en rodajas, cebolla en rodajas, lechuga fresca y salsa blanca en pan ajonjolí.",
@@ -66,6 +70,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Pollo Parrillero",
       description:
           "Jugosa pechuga de pollo de 154 g a la parrilla con salsa BBQ, pepinillos, tocineta, una taja de queso tipo mozzarella, pepinillos, cebolla en rodajas, lechuga y miel mostaza en pan ajonjolí.",
@@ -80,6 +85,7 @@ class Restaurant extends ChangeNotifier {
     ),
     //sandwich
     Food(
+      id: '',
       name: "Sandwich Mexicano",
       description:
           "Pan Francés, Salsa Qbano, Lechuga Batavia, Carne de Res Desmechada, Cebolla cabezona roja, Frijol Negro, Pico de Gallo, Guacamole, Salsa Queso Cheddar, Nachos.",
@@ -93,6 +99,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Sandwich Ropa Vieja Combo",
       description:
           "Pan Francés, Carne de Res Desmechada, Queso Amarillo, Lechuga, Tomate, Pimentón, Apio, Mostaza, Salsa BBQ, Pasta de Tomate, Cebolla Roja y Salsa Qbano..",
@@ -106,6 +113,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Sandwich Hawaiano",
       description:
           "Pan Francés, Jamon de Cerdo, Piña Calada, Queso Mozzarella y Mayonesa.",
@@ -119,6 +127,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Sandwich Especial",
       description:
           "Mix de jamones (res y cerdo), queso mozzarella, lechuga batavia y salsa Qbano.",
@@ -132,6 +141,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Sandwich Burger",
       description:
           "Pan Francés, Carne Hamburguesa de Res y Cerdo, Queso Mozzarella, Tocineta, Lechuga Batavia, Tomate, Pepinillos, Salsa BBQ, Salsa Qbano.",
@@ -146,6 +156,7 @@ class Restaurant extends ChangeNotifier {
     ),
     //Helados y mateadas
     Food(
+      id: '',
       name: "Helado De Chocolate",
       description:
           "Preparadas con helado de chocolate y ralladura de chocolate.",
@@ -159,6 +170,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Helado Brownie",
       description:
           "Brownie con cobertura de chocolate o arequipe. Acompañado de una bola de helado y ralladura de chocolate.",
@@ -172,6 +184,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Helado De cvainilla y café",
       description: "Preparadas con helado de vainilla y café.",
       imagPhat: "assets/images/sides/helados-café.png",
@@ -184,6 +197,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Helado De fresa",
       description: "Preparadas con helado de fresa y ralladura de chocolate.",
       imagPhat: "assets/images/sides/helados-fresa.png",
@@ -196,6 +210,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Helado De Frutos Rojos",
       description: "Preparadas con helado de frutos rojos y salsa de mora.",
       imagPhat: "assets/images/sides/frutos-del-bosque.png",
@@ -210,6 +225,7 @@ class Restaurant extends ChangeNotifier {
 
     //pizza
     Food(
+      id: '',
       name: "Pizza 3 Estaciones",
       description:
           "Nuestra versión especial de pollo y champiñones con chorizo.",
@@ -223,6 +239,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Pizza Americana",
       description: "Maíz tierno y tocineta con un toque picantico de pepperon.",
       imagPhat: "assets/images/desserts/Americana.png",
@@ -235,6 +252,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Pizza Honolulu",
       description: "Una combinación increíble con piña, tocineta y jalapeño.",
       imagPhat: "assets/images/desserts/Honolulu.png",
@@ -247,6 +265,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Pizza Triple Pepperoni",
       description:
           "Perfectamente horneada con el sabor del pepperoni en su máxima expresión.",
@@ -260,6 +279,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Pizza Hawaiian Chick",
       description:
           "Queso Mozarella, trocitos de pollo, piña, tocineta y salsa B.B.Q..",
@@ -275,6 +295,7 @@ class Restaurant extends ChangeNotifier {
 
     //bebidas
     Food(
+      id: '',
       name: "Coca-Cola sabor original 600 ml",
       description:
           "El auténtico sabor de la bebida Coca-Cola®, una refrescante manera de compartir los mejores momentos.",
@@ -288,6 +309,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Coca-Cola Zero 600 ml",
       description:
           "El auténtico sabor de la bebida Coca-Cola® Zero, una refrescante manera de compartir los mejores momentos.",
@@ -301,6 +323,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Quatro Toronja 400 ml",
       description:
           "El auténtico sabor de la bebida Quatro Toronja, una refrescante manera de compartir los mejores momentos.",
@@ -314,6 +337,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Sprite Limón 500 ml",
       description:
           "El auténtico sabor de la bebida Sprite Limón, una refrescante manera de compartir los mejores momentos.",
@@ -327,6 +351,7 @@ class Restaurant extends ChangeNotifier {
       ],
     ),
     Food(
+      id: '',
       name: "Club Colombia 330 ml",
       description:
           "La cerveza Club Colombia es de tipo lager de color dorado, elaborada con cebada malteada y malta de caramelo. Es una cerveza para las personas que disfruten de experiencias perfectas.",
@@ -569,6 +594,8 @@ class Restaurant extends ChangeNotifier {
     decimalDigits: 0, // Sin decimales
     customPattern: '\u00A4 #,###', // Mostrar el símbolo antes
   );
+
+  get userEmail => null;
 
 // Generar el recibo
   String displayCartReceipt() {

@@ -1,13 +1,17 @@
-// food item
+import 'package:flutter/material.dart';
+
+// Modelo de Comida (Food)
 class Food {
-  final String name; // cheese burger
-  final String description; // a burger full of cheese
-  final String imagPhat; // lib/images/cheese_burger.png
-  final double price; // 4.99
-  final FoodCategory category; // burger
-  List<Addon> availableAddons; // [ extra cheese, sauce, extra patty]
+  final String id;
+  final String name;
+  final String description;
+  final String imagPhat;
+  final double price;
+  final FoodCategory category;
+  List<Addon> availableAddons;
 
   Food({
+    required this.id,
     required this.name,
     required this.description,
     required this.imagPhat,
@@ -15,11 +19,9 @@ class Food {
     required this.category,
     required this.availableAddons,
   });
-
-  get id => null;
 }
 
-//food category
+// Categorías de comida
 enum FoodCategory {
   hamburguesa,
   sandwich,
@@ -28,13 +30,10 @@ enum FoodCategory {
   bebidas,
 }
 
-//food addons
+// Modelo de Addon (Extras)
 class Addon {
   final String name;
   final double price;
 
-  Addon({
-    required this.name,
-    required this.price,
-  });
+  Addon({required this.name, required this.price});
 }
